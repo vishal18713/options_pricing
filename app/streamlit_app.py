@@ -118,7 +118,7 @@ with tab2:
     df_greeks = compare_greeks(
         spot, strike, time_to_expiry, rate, volatility, opt_type, dividend_yield
     )
-    st.dataframe(df_greeks.style.format(precision=4), use_container_width=True)
+    st.dataframe(df_greeks.style.format(precision=4), width="stretch")
 
 with tab3:
     st.subheader("Bracketed Brent Implied Volatility Solver")
