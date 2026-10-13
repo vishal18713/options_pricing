@@ -1,4 +1,4 @@
-from options_engine.binomial import crr_price
+from options_engine.binomial import build_crr_tree_visualization, crr_price
 from options_engine.black_scholes import bsm_d1_d2, bsm_greeks, bsm_price
 from options_engine.forwards import (
     estimate_forward_from_parity,
@@ -11,7 +11,7 @@ from options_engine.greeks import (
     simulate_delta_hedging,
 )
 from options_engine.implied_volatility import check_price_bounds, implied_volatility
-from options_engine.monte_carlo import monte_carlo_price
+from options_engine.monte_carlo import monte_carlo_price, simulate_monte_carlo_paths
 from options_engine.quote_cleaning import (
     CleaningAuditSummary,
     CleaningFilterConfig,
@@ -47,5 +47,7 @@ __all__ = [
     "fit_svi_slice",
     "check_butterfly_arbitrage_slice",
     "check_calendar_arbitrage",
+    "build_crr_tree_visualization",
+    "simulate_monte_carlo_paths",
 ]
 __version__ = "0.1.0"

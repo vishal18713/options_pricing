@@ -167,3 +167,127 @@ def crr_price(
         },
         runtime_ms=elapsed_ms,
     )
+
+
+def build_crr_tree_visualization(
+    spot: float,
+    strike: float,
+    time_to_expiry: float,
+    rate: float,
+    volatility: float,
+    steps: int = 5,
+    option_type: OptionType | str = OptionType.CALL,
+    exercise_style: ExerciseStyle | str = ExerciseStyle.AMERICAN,
+    dividend_yield: float = 0.0,
+) -> dict:
+    """Build complete node tree data structure for interactive UI visualization.
+
+    Returns dict containing nodes and edges:
+    - nodes: list of dicts with step, index, stock_price, option_value, intrinsic_value, early_exercised
+    - edges: list of dicts with source_step, source_idx, target_step, target_idx, branch ('up' or 'down')
+    """
+    s = float(spot)
+    k = float(strike)
+    t = float(time_to_expiry)
+    r = float(rate)
+    v = float(volatility)
+    q = float(dividend_yield)
+    opt_type = OptionType(option_type)
+    ex_style = ExerciseStyle(exercise_style)
+
+    validate_market_inputs(s, k, t, v, r, q)
+
+    dt = t / steps
+    u = np.exp(v * np.sqrt(dt))
+    d = 1.0 / u
+    a = np.exp((r - q) * dt)
+    p = (a - d) / (u - d)
+    discount = np.exp(-r * dt)
+    q_prob = 1.0 - p
+
+    # Stock prices: stock_prices[i][j] = S * u^j * d^(i - j) for i=0..steps, j=0..i
+    stock_prices = [[0.0] * (i + 1) for i in range(steps + 1)]
+    for i in range(steps + 1):
+        for j in range(i + 1):
+            stock_prices[i][j] = s * (u**j) * (d ** (i - j))
+
+    # Option values and decisions
+    option_values = [[0.0] * (i + 1) for i in range(steps + 1)]
+    early_exercised = [[False] * (i + 1) for i in range(steps + 1)]
+    intrinsic_values = [[0.0] * (i + 1) for i in range(steps + 1)]
+
+    # Terminal payoffs at step N
+    for j in range(steps + 1):
+        stk = stock_prices[steps][j]
+        intr = max(stk - k, 0.0) if opt_type == OptionType.CALL else max(k - stk, 0.0)
+        intrinsic_values[steps][j] = intr
+        option_values[steps][j] = intr
+
+    # Backward induction
+    for i in range(steps - 1, -1, -1):
+        for j in range(i + 1):
+            stk = stock_prices[i][j]
+            intr = max(stk - k, 0.0) if opt_type == OptionType.CALL else max(k - stk, 0.0)
+            intrinsic_values[i][j] = intr
+            continuation = discount * (
+                p * option_values[i + 1][j + 1] + q_prob * option_values[i + 1][j]
+            )
+
+            if ex_style == ExerciseStyle.AMERICAN:
+                if intr > continuation + 1e-9:
+                    option_values[i][j] = intr
+                    early_exercised[i][j] = True
+                else:
+                    option_values[i][j] = continuation
+                    early_exercised[i][j] = False
+            else:
+                option_values[i][j] = continuation
+                early_exercised[i][j] = False
+
+    nodes = []
+    for i in range(steps + 1):
+        for j in range(i + 1):
+            nodes.append(
+                {
+                    "step": i,
+                    "node_idx": j,
+                    "time": i * dt,
+                    "stock_price": stock_prices[i][j],
+                    "option_value": option_values[i][j],
+                    "intrinsic_value": intrinsic_values[i][j],
+                    "early_exercised": early_exercised[i][j],
+                }
+            )
+
+    edges = []
+    for i in range(steps):
+        for j in range(i + 1):
+            edges.append(
+                {
+                    "from_step": i,
+                    "from_idx": j,
+                    "to_step": i + 1,
+                    "to_idx": j,
+                    "branch": "down",
+                }
+            )
+            edges.append(
+                {
+                    "from_step": i,
+                    "from_idx": j,
+                    "to_step": i + 1,
+                    "to_idx": j + 1,
+                    "branch": "up",
+                }
+            )
+
+    return {
+        "steps": steps,
+        "dt": dt,
+        "u": u,
+        "d": d,
+        "p": p,
+        "nodes": nodes,
+        "edges": edges,
+        "root_price": option_values[0][0],
+    }

@@ -213,3 +213,75 @@ def monte_carlo_price(
         seed=seed,
         variance_reduction=variance_techniques,
     )
+
+
+def simulate_monte_carlo_paths(
+    spot: float,
+    strike: float,
+    time_to_expiry: float,
+    rate: float,
+    volatility: float,
+    n_display_paths: int = 50,
+    n_total_paths: int = 20_000,
+    n_time_steps: int = 50,
+    seed: int | None = 42,
+    option_type: OptionType | str = OptionType.CALL,
+    dividend_yield: float = 0.0,
+) -> dict:
+    """Generate multi-step paths, terminal price distribution, payoffs, and running convergence."""
+    s = float(spot)
+    k = float(strike)
+    t = float(time_to_expiry)
+    r = float(rate)
+    v = float(volatility)
+    q = float(dividend_yield)
+    opt_type = OptionType(option_type)
+
+    validate_market_inputs(s, k, t, v, r, q)
+
+    rng = np.random.default_rng(seed)
+    dt = t / n_time_steps
+    time_grid = np.linspace(0.0, t, n_time_steps + 1)
+
+    # 1. Multi-step sample paths for visualization (n_display_paths)
+    drift_step = (r - q - 0.5 * v**2) * dt
+    diff_step = v * np.sqrt(dt)
+
+    z_steps = rng.standard_normal((n_display_paths, n_time_steps))
+    log_returns = drift_step + diff_step * z_steps
+    cum_log_returns = np.cumsum(log_returns, axis=1)
+
+    sample_paths = np.zeros((n_display_paths, n_time_steps + 1))
+    sample_paths[:, 0] = s
+    sample_paths[:, 1:] = s * np.exp(cum_log_returns)
+
+    # 2. Large sample terminal prices for distribution and convergence
+    drift_t = (r - q - 0.5 * v**2) * t
+    diff_t = v * np.sqrt(t)
+
+    z_large = rng.standard_normal(n_total_paths)
+    terminal_prices = s * np.exp(drift_t + diff_t * z_large)
+
+    discount = np.exp(-r * t)
+    if opt_type == OptionType.CALL:
+        payoffs = np.maximum(terminal_prices - k, 0.0)
+    else:
+        payoffs = np.maximum(k - terminal_prices, 0.0)
+
+    discounted_payoffs = discount * payoffs
+
+    # Running cumulative average price convergence
+    sample_subsets = np.linspace(100, n_total_paths, 100, dtype=int)
+    running_means = [float(np.mean(discounted_payoffs[:count])) for count in sample_subsets]
+
+    return {
+        "time_grid": time_grid,
+        "sample_paths": sample_paths,
+        "terminal_prices": terminal_prices,
+        "payoffs": payoffs,
+        "discounted_payoffs": discounted_payoffs,
+        "sample_subsets": sample_subsets,
+        "running_means": running_means,
+        "final_price": float(np.mean(discounted_payoffs)),
+        "final_se": float(np.std(discounted_payoffs, ddof=1) / np.sqrt(n_total_paths)),
+    }
