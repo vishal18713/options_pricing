@@ -61,17 +61,36 @@
 
 ## 🖥️ Interactive Web App
 
-A clean, modern **Streamlit** dashboard is included out of the box. The presentation layer delegates directly to the core package with **zero duplicated logic**:
+A clean, modern **Streamlit** dashboard with interactive **Plotly** visualizations is included out of the box. The presentation layer delegates directly to the core package with **zero duplicated logic**:
 
 ```powershell
 python -m streamlit run app/streamlit_app.py
 ```
 
-Features included in the dashboard:
-- 📊 **Multi-Engine Valuation**: Side-by-side comparison of BSM, CRR American tree, and Monte Carlo with confidence bounds.
-- 🔬 **Cross-Method Greeks Table**: Live comparison of Analytical vs Finite Difference vs Pathwise Greeks.
-- ⚡ **Interactive IV Solver**: Real-time Brent root finding with theoretical lower/upper boundary diagnostics.
-- 📉 **Parametric SVI Smile & Arbitrage**: Live SVI curve fitting with automated butterfly-arbitrage testing.
+### 🖼️ Interactive Visualizations Preview
+
+<div align="center">
+
+#### 🌲 Interactive CRR Binomial Tree (with American Early Exercise)
+<img src="reports/figures/binomial_tree.png" alt="Interactive Binomial Tree" width="90%"/>
+<br/>
+<sub><i>Up/down lattice nodes showing stock prices & option values. Early-exercise decisions are distinctly flagged as red diamonds vs blue continuation states.</i></sub>
+
+<br/><br/>
+
+#### 🌐 Rotatable 3D Implied Volatility Surface
+<img src="reports/figures/volatility_surface.png" alt="3D Implied Volatility Surface" width="90%"/>
+<br/>
+<sub><i>Strike / log-moneyness vs maturity term structure plotted with implied volatility on the Z-axis, including live arbitrage health diagnostics.</i></sub>
+
+<br/><br/>
+
+#### 🎲 Monte Carlo Simulation Explorer
+<img src="reports/figures/monte_carlo_simulation.png" alt="Monte Carlo Simulation Explorer" width="95%"/>
+<br/>
+<sub><i>Multi-step Geometric Brownian Motion trajectories, terminal price distribution with strike cut-off, and running empirical price convergence vs BSM benchmark.</i></sub>
+
+</div>
 
 ---
 
@@ -202,6 +221,9 @@ Generated plots saved in `reports/figures/`:
 
 | Figure | Description | Key Insight |
 | :--- | :--- | :--- |
+| **`binomial_tree.png`** | CRR Binomial Lattice (American Put) | Displays branching with stock/option node prices and highlights early-exercise boundaries. |
+| **`volatility_surface.png`** | 3D Implied Volatility Surface | Visualizes strike/maturity skew, smile term structure, and arbitrage health. |
+| **`monte_carlo_simulation.png`** | Monte Carlo Explorer | Illustrates GBM trajectories, terminal price distribution, and empirical convergence. |
 | **`crr_convergence.png`** | CRR Binomial Tree vs Steps $N$ | Non-monotonic "sawtooth" convergence approaching exact BSM European boundary. |
 | **`greeks_surface.png`** | BSM Greeks ($\Delta, \Gamma, \nu, \Theta$) vs Spot | Illustrates peaked Gamma/Vega at-the-money and passage-of-time decay profiles. |
 | **`hedge_simulation.png`** | Discrete Delta Hedging Error | Demonstrates how increasing hedge rebalancing ($N=10 \to 60$) contracts P&L tracking dispersion. |
@@ -214,7 +236,7 @@ Generated plots saved in `reports/figures/`:
 The engine enforces strict numerical invariant assertions and cross-checks against **QuantLib 1.43**:
 
 ```powershell
-# Run entire test suite (48 tests)
+# Run entire test suite (50 tests)
 python -m pytest -q
 
 # Run statement coverage report
