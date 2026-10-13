@@ -1,0 +1,35 @@
+project:
+  name: options-pricing-greeks-engine
+  random_seed: 42
+  day_count: ACT/365
+  rate_compounding: continuous
+  volatility_units: decimal
+
+pricing:
+  crr_steps: 500
+  monte_carlo_paths: 200000
+  antithetic_variates: true
+  control_variate: true
+
+implied_volatility:
+  solver: brentq
+  sigma_min: 0.000001
+  sigma_max: 5.0
+  max_iterations: 200
+
+market_data:
+  provider: yfinance
+  save_raw_snapshot: true
+  max_relative_bid_ask_spread: 0.50
+  require_positive_bid: true
+
+surface:
+  model: raw_svi
+  min_quotes_per_expiry: 8
+  fit_max_iterations: 5000
+  calendar_diagnostic: true
+  butterfly_diagnostic: true
+
+reporting:
+  save_figures: true
+  output_dir: reports/figures
