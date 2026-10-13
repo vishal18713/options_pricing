@@ -17,6 +17,13 @@ from options_engine.quote_cleaning import (
     CleaningFilterConfig,
     clean_option_quotes,
 )
+from options_engine.volatility_surface import (
+    SVIParameters,
+    check_butterfly_arbitrage_slice,
+    check_calendar_arbitrage,
+    fit_svi_slice,
+    raw_svi_total_variance,
+)
 
 __all__ = [
     "bsm_price",
@@ -35,5 +42,10 @@ __all__ = [
     "implied_volatility",
     "forward_price_theoretical",
     "estimate_forward_from_parity",
+    "SVIParameters",
+    "raw_svi_total_variance",
+    "fit_svi_slice",
+    "check_butterfly_arbitrage_slice",
+    "check_calendar_arbitrage",
 ]
 __version__ = "0.1.0"
