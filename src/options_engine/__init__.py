@@ -1,11 +1,16 @@
 from options_engine.binomial import crr_price
 from options_engine.black_scholes import bsm_d1_d2, bsm_greeks, bsm_price
+from options_engine.forwards import (
+    estimate_forward_from_parity,
+    forward_price_theoretical,
+)
 from options_engine.greeks import (
     compare_greeks,
     finite_difference_greeks,
     pathwise_mc_greeks,
     simulate_delta_hedging,
 )
+from options_engine.implied_volatility import check_price_bounds, implied_volatility
 from options_engine.monte_carlo import monte_carlo_price
 from options_engine.quote_cleaning import (
     CleaningAuditSummary,
@@ -26,5 +31,9 @@ __all__ = [
     "clean_option_quotes",
     "CleaningFilterConfig",
     "CleaningAuditSummary",
+    "check_price_bounds",
+    "implied_volatility",
+    "forward_price_theoretical",
+    "estimate_forward_from_parity",
 ]
 __version__ = "0.1.0"
