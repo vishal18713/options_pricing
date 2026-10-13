@@ -1,0 +1,142 @@
+{
+  "metadata": {
+    "ticker": "SPY",
+    "retrieval_timestamp": "2026-10-13T12:00:00Z",
+    "spot_price": 500.0,
+    "currency": "USD",
+    "provider": "yfinance_fixture",
+    "expiries": ["2026-11-20", "2026-12-18"]
+  },
+  "quotes": [
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 490.0,
+      "call_put": "call",
+      "bid": 15.20,
+      "ask": 15.50,
+      "last": 15.35,
+      "volume": 2500,
+      "open_interest": 10500,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 500.0,
+      "call_put": "call",
+      "bid": 8.10,
+      "ask": 8.30,
+      "last": 8.20,
+      "volume": 6800,
+      "open_interest": 22400,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 510.0,
+      "call_put": "call",
+      "bid": 3.40,
+      "ask": 3.60,
+      "last": 3.50,
+      "volume": 4200,
+      "open_interest": 15600,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 520.0,
+      "call_put": "call",
+      "bid": 0.00,
+      "ask": 0.15,
+      "last": 0.05,
+      "volume": 10,
+      "open_interest": 500,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 530.0,
+      "call_put": "call",
+      "bid": 2.50,
+      "ask": 2.00,
+      "last": 2.10,
+      "volume": 5,
+      "open_interest": 100,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 540.0,
+      "call_put": "call",
+      "bid": 0.05,
+      "ask": 0.80,
+      "last": 0.40,
+      "volume": 12,
+      "open_interest": 200,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 550.0,
+      "call_put": "call",
+      "bid": null,
+      "ask": 0.50,
+      "last": 0.30,
+      "volume": 0,
+      "open_interest": 50,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 490.0,
+      "call_put": "put",
+      "bid": 4.10,
+      "ask": 4.30,
+      "last": 4.20,
+      "volume": 3500,
+      "open_interest": 12000,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 500.0,
+      "call_put": "put",
+      "bid": 7.00,
+      "ask": 7.20,
+      "last": 7.10,
+      "volume": 5800,
+      "open_interest": 18900,
+      "source": "fixture"
+    },
+    {
+      "timestamp": "2026-10-13T12:00:00Z",
+      "ticker": "SPY",
+      "expiry": "2026-11-20",
+      "strike": 510.0,
+      "call_put": "put",
+      "bid": 12.00,
+      "ask": 12.30,
+      "last": 12.15,
+      "volume": 2100,
+      "open_interest": 9800,
+      "source": "fixture"
+    }
+  ]
+}

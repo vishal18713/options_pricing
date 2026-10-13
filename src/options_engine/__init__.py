@@ -7,6 +7,11 @@ from options_engine.greeks import (
     simulate_delta_hedging,
 )
 from options_engine.monte_carlo import monte_carlo_price
+from options_engine.quote_cleaning import (
+    CleaningAuditSummary,
+    CleaningFilterConfig,
+    clean_option_quotes,
+)
 
 __all__ = [
     "bsm_price",
@@ -18,5 +23,8 @@ __all__ = [
     "pathwise_mc_greeks",
     "compare_greeks",
     "simulate_delta_hedging",
+    "clean_option_quotes",
+    "CleaningFilterConfig",
+    "CleaningAuditSummary",
 ]
 __version__ = "0.1.0"
